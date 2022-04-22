@@ -8,28 +8,35 @@ class FashionMinstModel(nn.Module):
         super().__init__()
         self.fc1 = nn.Linear(784, 256)
         self.fc2 = nn.Linear(256, 128)
-        self.fc3 = nn.Linear(128, 10)
+        self.fc3 = nn.Linear(128, 64)
+        self.fc4 = nn.Linear(64, 10)
         self.dropout = nn.Dropout()
 
     def forward(self, x):
         x = self.fc1(x)
-        x = F.rrelu(x)
-        x=self.dropout(x)
+        x = torch.sigmoid(x)
+        self.dropout(x)
 
         x = self.fc2(x)
-        x = F.rrelu(x)
-        x=self.dropout(x)
+        x = F.relu(x)
+        self.dropout(x)
 
         x = self.fc3(x)
-        x = F.log_softmax(x,dim=1)
+        x = F.relu(x)
+        self.dropout(x)
+
+        x = self.fc4(x)
+        x = F.log_softmax(x, dim=1)
 
         return x
 
-    def predict(self,x):
+    def predict(self, x):
         self.eval()
         with torch.no_grad():
-            x=self.forward(x)
-            x=torch.exp(x)
+            x = self.forward(x)
+            x = torch.exp(x)
         self.train()
-        return x
+        _, top_class = x.topk(1, dim=1)
+        top_class = top_class.view(-1)
+        return top_class
 
