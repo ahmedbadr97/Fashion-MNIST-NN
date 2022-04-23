@@ -2,5 +2,5 @@ venv/
 .idea/
 dataset/
 src/__pycache__/
-model_weights/
+model_weights/train_weights
 notebooks/.ipynb_checkpoints
