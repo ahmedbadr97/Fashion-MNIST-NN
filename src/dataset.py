@@ -16,7 +16,7 @@ class FashionDataset(Dataset):
         self.img_vectors = np.asarray(df.iloc[:, 1:], dtype=float)
 
         if normalized:
-            self.img_vectors = normalize_data(self.img_vectors)
+            self.img_vectors = normalize_np_data(self.img_vectors)
 
     def __getitem__(self, idx):
         return torch.tensor(self.img_vectors[idx], dtype=torch.float), torch.tensor(self.labels[idx])
@@ -25,7 +25,7 @@ class FashionDataset(Dataset):
         return self.size
 
 
-def normalize_data(img_vectors):
+def normalize_np_data(img_vectors):
     means = img_vectors.mean(axis=1)
     stds = img_vectors.std(axis=1)
 
@@ -33,3 +33,8 @@ def normalize_data(img_vectors):
     for i in range(len(img_vectors)):
         normalized_data[i] = (img_vectors[i] - means[i]) / stds[i]
     return normalized_data
+
+
+def normalize_tensor(img_vectors):
+    img_vectors = normalize_np_data(img_vectors.numpy())
+    return torch.tensor(img_vectors)

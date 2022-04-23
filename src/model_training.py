@@ -97,18 +97,21 @@ def train(model: FashionMinstModel, epochs, learning_rate, train_loader, test_lo
 
         # ________________ saving model weights____________________
         # if new score in test accuracy achieved save model weights with file name and time and train_acc and test_acc
-        if min_test_loss > test_loss and min_train_loss > train_loss:
+        if min_test_loss > test_loss and min_train_loss > train_loss :
             time = datetime.now().strftime("%d_%m %I_%M")
-            file_name = f"{time} train_{int(train_accuracy)} test_{int(test_accuracy)}.pth"
-            full_pth = f"{weights_save_pth}/{file_name}"
-            print(f"new min test and train loss  achieved --> model weights saved in '{weights_save_pth}/{file_name}'")
+            file_name = f"{time} train_{int(train_accuracy)} test_{int(test_accuracy)}.pt"
+            full_pth = f"{weights_save_pth}/train_weights/{file_name}"
+            print(
+                f"new min test and train loss  achieved --> model weights saved in '{full_pth}'")
             torch.save(model.state_dict(), full_pth)
             min_test_loss = test_loss
             min_train_loss = train_loss
+
 
         # ___________overfitting test___________#
         if test_loss > train_loss:
             print("!!!Warning overfitting!!!")
         print()
+
 
     return train_losses, test_losses, epochs_train_accuracy, epochs_test_accuracy

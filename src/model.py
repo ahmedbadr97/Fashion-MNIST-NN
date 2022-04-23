@@ -14,7 +14,7 @@ class FashionMinstModel(nn.Module):
 
     def forward(self, x):
         x = self.fc1(x)
-        x = torch.sigmoid(x)
+        x = F.relu(x)
         self.dropout(x)
 
         x = self.fc2(x)
@@ -39,4 +39,8 @@ class FashionMinstModel(nn.Module):
         _, top_class = x.topk(1, dim=1)
         top_class = top_class.view(-1)
         return top_class
+
+    def load_weights(self, path):
+        state_dict=torch.load(path)
+        self.load_state_dict(state_dict)
 

@@ -3,3 +3,4 @@ venv/
 dataset/
 src/__pycache__/
 model_weights/
+notebooks/.ipynb_checkpoints
